@@ -110,6 +110,86 @@ p {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
 
+/* Stylizacja formularza */
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9);  /* Lekko przezroczyste tło */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Stylizacja sekcji formularza */
+form div {
+    margin-bottom: 15px;
+}
+
+/* Stylizacja etykiet */
+form label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+/* Stylizacja pól wejściowych */
+form input[type="text"],
+form input[type="number"],
+form textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Dodanie paddingu do szerokości */
+    background-color: #f9f9f9;
+}
+
+/* Stylizacja tekstu w polu textarea */
+form textarea {
+    height: 150px;
+    resize: vertical; /* Umożliwia zmianę wysokości */
+}
+
+/* Stylizacja przycisku */
+form button {
+    padding: 12px 20px;
+    background-color: #4CAF50;  /* Zielony kolor */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+form button:hover {
+    background-color: #45a049;  /* Jaśniejszy zielony przy najechaniu */
+}
+
+/* Stylizacja sekcji disabled (inne) */
+form .other input {
+    background-color: #e0e0e0;  /* Jasnoszare tło dla pola disabled */
+    color: #888;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+/* Stylizacja formularza na małych ekranach */
+@media (max-width: 600px) {
+    form {
+        padding: 15px;
+    }
+
+    form input[type="text"],
+    form input[type="number"],
+    form textarea,
+    form button {
+        font-size: 14px;
+    }
+}
+
 /* Stopka */
 .footer {
     position: fixed;

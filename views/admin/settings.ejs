@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Administratora</title>
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div>
+        <!-- Sidebar (Aside) -->
+        <aside id="sidebar">
+            <div class="sidebar-header">
+                <h2>Panel Admina</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/panel/admin/<%= id %>">Strona Główna</a></li>
+                    <li><a href="/panel/admin/<%= id %>/users">Zarządzanie Użytkownikami</a></li>
+                    <li><a href="/panel/admin/<%= id %>/settings">Ustawienia</a></li>
+                    <li><a href="/panel/admin/<%= id %>/logs">Logi</a></li>
+                    <li><a href="/panel/logout">Wyloguj</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="container">
+            <header>
+                <h1>Witaj w Panelu Administratora</h1>
+            </header>
+
+            <section class="content">
+                <h2>Wstaw Weryfikację <p style="color: red;">Tymczasowo i dla testów</p></h2>
+                <p>Wstaw weryfikację w formie embed z linkiem jako przycisk do weryfikacji.</p>
+                <form id="verificationForm" action="http://localhost:3000/api/v1/very-embed/" method="post">
+                    <div>
+                        <label for="title">Tytuł:</label>
+                        <input type="text" id="title" name="title" placeholder="Ustaw własny tytuł embed" value="Przejdź przez Weryfikację" required>
+                    </div>
+                
+                    <div>
+                        <label for="content">Opis:</label>
+                        <textarea name="content" id="content" placeholder="Ustaw własny opis embed" required></textarea>
+                    </div>
+                
+                    <div>
+                        <label for="channel-id">ID Kanału:</label>
+                        <input type="number" name="channel-id" id="channel-id" placeholder="Tutaj musi być id kanału, a nie nazwa kanału" required>
+                    </div>
+                
+                    <div class="other">
+                        <input type="text" disabled value="1109447947575373866"> <!-- To może być użyteczne w przyszłości -->
+                    </div>
+                
+                    <button type="submit">Wstaw Weryfikację Na Discord</button>
+                </form>
+            </section>            
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+
+    <script>
+        document.getElementById('verificationForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Zapobiegaj domyślnemu wysłaniu formularza
+    
+            // Pobierz wartości z formularza
+            const guildId = '1109447947575373866';  // Możesz zmienić tę wartość na dynamiczną, jeśli jest dostępna
+            const channelId = document.getElementById('channel-id').value;
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+    
+            // Ustaw URL formularza dynamicznie
+            const actionUrl = `http://localhost:3000/api/v1/very-embed/${guildId}/${channelId}/`;
+    
+            // Zaktualizuj atrybut action formularza
+            this.action = actionUrl;
+    
+            // Możesz teraz ręcznie wysłać formularz, jeśli chcesz
+            this.submit();
+        });
+    </script>
+</body>
+</html>

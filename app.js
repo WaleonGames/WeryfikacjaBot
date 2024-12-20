@@ -4,11 +4,17 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 const cookieParser = require('cookie-parser');
-const { Client, GatewayIntentBits } = require('discord.js');
+const { Client, GatewayIntentBits, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const crypto = require('crypto');
 const fs = require('fs');
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
+const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,             // Dostęp do serwerów
+        GatewayIntentBits.GuildMessages,      // Dostęp do wiadomości
+        GatewayIntentBits.MessageContent      // Dostęp do treści wiadomości
+    ]
+});
 
 const app = express();
 const port = process.env.PORT;
@@ -320,6 +326,139 @@ app.get('/panel/admin/:id', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.send('Wystąpił błąd podczas uzyskiwania danych o użytkowniku.');
+    }
+});
+
+// Panel administratora
+app.get('/panel/admin/:id/settings', async (req, res) => {
+    const userId = req.params.id;
+    const sessionToken = req.cookies.sessionToken;
+
+    // Sprawdzenie, czy token sesji istnieje w ciasteczku
+    if (!sessionToken) {
+        return res.redirect('/login'); // Jeśli brak tokenu sesji, przekierowanie do logowania
+    }
+
+    // Odszyfrowanie tokenu sesji
+    const decryptedToken = decrypt(sessionToken, process.env.SECRET_KEY);
+
+    // Sprawdzenie, czy sesja użytkownika istnieje i jest zgodna z tokenem ciasteczka
+    const userSession = Object.keys(sessions).find(id => sessions[id].sessionToken === decryptedToken);
+    
+    if (!userSession || userSession !== userId) {
+        return res.redirect('/'); // Jeśli użytkownik nie jest zalogowany, przekierowanie do logowania
+    }
+
+    try {
+        const accessToken = sessions[userId]?.sessionToken;
+
+        if (!accessToken) {
+            return res.redirect('/'); // Jeśli brak dostępu, przekierowanie do logowania
+        }
+
+        // Pobieranie danych o użytkowniku
+        const userResponse = await axios.get('https://discord.com/api/users/@me', {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+
+        const user = userResponse.data;
+
+        // Pobranie danych o użytkowniku na serwerze (role, nick, itd.)
+        const guild = await client.guilds.fetch(GUILD_ID);
+        const member = await guild.members.fetch(userId);
+
+        // Sprawdzanie, czy użytkownik jest administratorem
+        const isAdmin = member.roles.cache.some(role => role.id === '1109455318699741184'); // ID roli admina
+
+        if (!isAdmin) {
+            return res.send('Brak dostępu do panelu administratora');
+        }
+
+        const roles = member.roles.cache.map(role => role.name).join(', ');
+
+        // Pobranie bannera użytkownika (tylko jeśli ma Nitro)
+        let bannerUrl = null;
+        if (user.banner) {
+            const bannerHash = user.banner;
+            bannerUrl = `https://cdn.discordapp.com/banners/${userId}/${bannerHash}.png?size=512`;
+        }
+
+        // Renderowanie strony administratora z danymi użytkownika
+        res.render('admin/settings', {
+            username: user.username,
+            avatar: `https://cdn.discordapp.com/avatars/${userId}/${user.avatar}.png`,
+            id: userId,
+            roles: roles || 'Brak ról',
+            banner: bannerUrl
+        });
+    } catch (error) {
+        console.error(error);
+        res.send('Wystąpił błąd podczas uzyskiwania danych o użytkowniku.');
+    }
+});
+
+app.post('/api/v1/very-embed/:guildId/:channelId', async (req, res) => {
+    const { title, content } = req.body;
+    const guildId = req.params.guildId;
+    const channelId = req.params.channelId;
+
+    // Sprawdzenie danych wejściowych
+    if (!title || !content || !guildId || !channelId) {
+        return res.status(400).send('Brak wymaganych danych.');
+    }
+
+    if (isNaN(channelId)) {
+        return res.status(400).send('ID kanału musi być liczbą.');
+    }
+
+    try {
+        // Pobierz serwer (guild) za pomocą guildId
+        const guild = await client.guilds.fetch(guildId);
+
+        // Pobierz kanał za pomocą channelId
+        const channel = await guild.channels.fetch(channelId);
+
+        // Sprawdzenie, czy bot ma uprawnienia do wysyłania wiadomości w tym kanale
+        if (!channel.permissionsFor(client.user).has('SEND_MESSAGES')) {
+            return res.status(403).send('Bot nie ma uprawnień do wysyłania wiadomości w tym kanale.');
+        }
+
+        // Tworzenie embedu
+        const embed = new EmbedBuilder()
+            .setTitle(title)
+            .setDescription(content)
+            .setColor('#0099ff')  // Możesz ustawić kolor, np. na niebieski
+            .setTimestamp();      // Dodaje czas do embedu
+
+        // Tworzenie przycisku z linkiem
+        const buttonweb = new ButtonBuilder()
+            .setLabel('Wejdź teraz na Weryfikację (BETA)')
+            .setStyle(ButtonStyle.Link)  // Użycie ButtonStyle.Link, aby utworzyć przycisk z linkiem
+            .setURL('http://very.htgmc.pl');  // Link do strony weryfikacji
+
+        // Stworzenie wiersza z przyciskiem
+        const actionRow = new ActionRowBuilder()
+            .addComponents(buttonweb);
+
+        // Wyślij embed do kanału wraz z przyciskiem
+        await channel.send({
+            embeds: [embed],
+            components: [actionRow]  // Wysłanie przycisku z linkiem w komponencie
+        });
+
+        // Zwróć odpowiedź z informacjami o stworzeniu embedu
+        res.json({
+            message: 'Embed został pomyślnie utworzony i wysłany.',
+            embed: {
+                title: embed.title,
+                description: embed.description
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Wystąpił błąd przy wysyłaniu embedu.');
     }
 });
 
