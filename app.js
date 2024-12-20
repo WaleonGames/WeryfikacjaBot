@@ -32,7 +32,7 @@ client.login(process.env.DISCORD_TOKEN);
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
-const GUILD_ID = '1109447947575373866';
+const GUILD_ID = '1109447947575373866'; // Id serwera
 const VERIFY_ROLE_ID = '1318671279766900807'; // ID roli, która zostanie przydzielona po weryfikacji
 
 // Przechowywanie tokenów sesji (w prostym obiekcie)
