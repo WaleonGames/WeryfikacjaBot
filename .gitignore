@@ -1,0 +1,30 @@
+# Node.js
+node_modules/
+
+# Pliki logów
+*.log
+logs/
+
+# Pliki tymczasowe
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Wygenerowane pliki
+/dist
+/build
+
+# Pliki konfiguracyjne środowiska
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Backupy
+*.bak
+*.swp
