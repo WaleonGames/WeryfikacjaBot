@@ -16,6 +16,7 @@ yarn-error.log*
 
 # Pliki konfiguracyjne środowiska
 .env
+.gitignore
 
 # IDE
 .vscode/
