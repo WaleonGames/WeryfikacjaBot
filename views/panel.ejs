@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel użytkownika</title>
+    <link rel="stylesheet" href="/css/panel.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1><%= username %></h1>
+            <a href="/forum/" style="color: white; text-decoration: none;">Dyskusja/Forum!</a>
+            <a href="/panel/logout" style="color: white; text-decoration: none;">Wyloguj się!</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Profil użytkownika</h1>
+    
+        <!-- Wyświetlanie avatara -->
+        <img src="<%= avatar %>" alt="Avatar" width="100" height="100">
+    
+        <!-- Wyświetlanie nazwy użytkownika i numeru tagu -->
+        <h2><%= username %></h2>
+    
+        <!-- Wyświetlanie ID użytkownika -->
+        <p>ID: <%= id %></p>
+    
+        <!-- Wyświetlanie ról użytkownika -->
+        <p>Role: <%= roles %></p>
+    
+        <!-- Wyświetlanie bannera, jeśli istnieje -->
+        <% if (banner) { %>
+            <img src="<%= banner %>" alt="Banner" width="100%">
+        <% } else { %>
+            <p>Brak bannera (wymaga Nitro).</p>
+        <% } %>
+    </div>    
+
+    <div class="footer">
+        <p><a href="https://discord.gg/QyHSdWNZGe" style="color: white; text-decoration: none;">Ciężka Praca 22/25</a> x HTGMC Weryfikacja, <a href="/panel/logout" style="color: white; text-decoration: none;">Wyloguj się teraz!</a></p>
+    </div>
+</body>
+</html>
