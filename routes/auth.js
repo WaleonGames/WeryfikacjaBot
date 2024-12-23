@@ -1,72 +1,96 @@
+require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
-const crypto = require('crypto');
+const { encrypt, decrypt } = require('../modul/crypto');  // Importowanie funkcji z modułu
+const { addSession, getSession, removeSession } = require('../modul/sessions'); // Importowanie funkcji sesji
 const router = express.Router();
-const Session = require('../models/Session');
 
-// Funkcja szyfrująca token sesji
-const encrypt = (text, secretKey) => {
-    const iv = crypto.randomBytes(16);
-    const key = crypto.createHash('sha256').update(secretKey).digest();
-    const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
-    return iv.toString('hex') + ':' + cipher.update(text, 'utf8', 'hex') + cipher.final('hex');
-};
-
-// Funkcja deszyfrująca token sesji
-const decrypt = (encryptedText, secretKey) => {
-    const [ivHex, encrypted] = encryptedText.split(':');
-    const iv = Buffer.from(ivHex, 'hex');
-    const key = crypto.createHash('sha256').update(secretKey).digest();
-    const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
-    return decipher.update(encrypted, 'hex', 'utf8') + decipher.final('utf8');
-};
-
-// Logowanie przez Discord
+// Callback po zalogowaniu przez OAuth2
 router.get('/auth/discord/callback', async (req, res) => {
     const code = req.query.code;
-    if (!code) return res.send('Nie udało się uzyskać kodu.');
+
+    if (!code) {
+        console.error('Brak kodu w zapytaniu.');
+        return res.send('Nie udało się uzyskać kodu.');
+    }
 
     try {
-        const { data } = await axios.post('https://discord.com/api/oauth2/token', new URLSearchParams({
+        // Uzyskiwanie tokenu dostępowego od Discorda
+        const response = await axios.post('https://discord.com/api/oauth2/token', new URLSearchParams({
             client_id: process.env.CLIENT_ID,
             client_secret: process.env.CLIENT_SECRET,
             grant_type: 'authorization_code',
-            code,
+            code: code,
             redirect_uri: process.env.REDIRECT_URI
-        }), { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+        }), {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
 
-        const userData = (await axios.get('https://discord.com/api/users/@me', { headers: { Authorization: `Bearer ${data.access_token}` } })).data;
-        const encryptedToken = encrypt(data.access_token, process.env.SECRET_KEY);
+        const accessToken = response.data.access_token;
 
-        // Zapisanie sesji do MongoDB
-        const newSession = new Session({ userId: userData.id, sessionToken: data.access_token });
-        await newSession.save();
+        // Uzyskiwanie danych o użytkowniku
+        const userDataResponse = await axios.get('https://discord.com/api/users/@me', {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
 
-        // Zapisanie tokenu w cookies
-        res.cookie('sessionToken', encryptedToken, { maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true, sameSite: 'Strict' });
-        res.redirect(`/panel/user/${userData.id}`);
-    } catch (err) {
-        console.error(err);
-        res.send('Błąd weryfikacji.');
+        const userData = userDataResponse.data;
+
+        // Dodawanie sesji na podstawie userId
+        addSession(userData.id, accessToken);
+
+        // Szyfrowanie tokenu sesji
+        const encryptedToken = encrypt(accessToken, process.env.SECRET_KEY);
+
+        // Ustawienie ciasteczka z tokenem sesji
+        res.cookie('sessionToken', encryptedToken, { maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true });
+
+        // Przekierowanie do odpowiedniego panelu
+        return res.redirect(`/panel/user/${userData.id}`);
+
+    } catch (error) {
+        console.error('Błąd podczas weryfikacji OAuth2:', error);
+        res.send('Wystąpił błąd podczas weryfikacji.');
     }
 });
 
-// Logowanie (strona główna)
 router.get('/', (req, res) => {
     const sessionToken = req.cookies.sessionToken;
+
     if (sessionToken) {
-        try {
-            const decryptedToken = decrypt(sessionToken, process.env.SECRET_KEY);
-            Session.findOne({ sessionToken: decryptedToken }).then(session => {
-                if (session) return res.redirect(`/panel/user/${session.userId}`);
-                res.send('Nie znaleziono użytkownika.');
+        // Logowanie ciasteczka sesji
+        console.log('Znaleziono ciasteczko sesji:', sessionToken);
+
+        // Odszyfrowanie tokenu sesji
+        const decryptedToken = decrypt(sessionToken, process.env.SECRET_KEY);
+
+        // Sprawdź, czy użytkownik jest zalogowany na podstawie sesji
+        if (decryptedToken) {
+            // Uzyskiwanie danych użytkownika na podstawie tokenu sesji
+            axios.get('https://discord.com/api/users/@me', {
+                headers: {
+                    Authorization: `Bearer ${decryptedToken}`
+                }
+            }).then(userDataResponse => {
+                const userData = userDataResponse.data;
+
+                // Jeśli użytkownik jest zalogowany, przekieruj go do jego panelu
+                return res.redirect(`/panel/user/${userData.id}`);
+            }).catch(error => {
+                console.error('Błąd podczas uzyskiwania danych użytkownika:', error);
+                return res.send('Wystąpił błąd przy uzyskiwaniu danych użytkownika.');
             });
-        } catch (err) {
-            console.error('Błąd przy wczytywaniu sesji:', err);
-            return res.send('Błąd sesji.');
+        } else {
+            return res.redirect('/');
         }
     } else {
-        res.render('index', { loginUrl: `https://discord.com/oauth2/authorize?client_id=${process.env.CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(process.env.REDIRECT_URI)}&scope=guilds.join` });
+        // Jeśli nie ma sesji, pokaż link do weryfikacji przez Discord
+        res.render('index', {
+            loginUrl: `https://discord.com/oauth2/authorize?client_id=${process.env.CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(process.env.REDIRECT_URI)}&scope=guilds.join`
+        });
     }
 });
 
