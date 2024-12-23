@@ -1,0 +1,75 @@
+/* Kontener dla r�l */
+.roles-container {
+    display: flex;
+    flex-wrap: wrap; /* Pozwalamy na zawijanie element�w do nowych wierszy */
+    gap: 20px; /* Odst�p mi�dzy kolumnami */
+    justify-content: space-between; /* Wyr�wnujemy elementy w poziomie */
+}
+
+/* Kolumny w formularzu */
+.role-column {
+    flex: 1 1 calc(33.33% - 20px); /* Ustawiamy 3 kolumny, uwzgl�dniaj�c odst�py */
+    min-width: 250px; /* Minimalna szeroko�� kolumny */
+    display: flex;
+    align-items: center; /* Centrujemy zawarto�� w pionie */
+}
+
+/* Styl dla checkbox�w i etykiet */
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+label {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Responsywno�� dla urz�dze� mobilnych */
+@media (max-width: 768px) {
+    .role-column {
+        flex: 1 1 100%; /* Na ma�ych ekranach kolumny zajmuj� ca�� szeroko�� */
+    }
+}
+
+.header-link, .footer-link {
+    text-decoration: none;
+    color: white;
+}
+
+/* Stylizacja nagłówka */
+header {
+    position: fixed;
+    top: 70px;
+    left: 210px;
+    right: 210px;
+    background-color: rgba(255, 255, 255, 0.4);  /* Białe półprzezroczyste tło */
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-content h1 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.header-content form button {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.header-content form button:hover {
+    background-color: #45a049;
+}
