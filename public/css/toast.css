@@ -1,0 +1,32 @@
+.notifications {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.notification {
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #fff;
+    opacity: 1;
+    transition: opacity 1s ease-out;
+}
+
+.notification.success {
+    background-color: green;
+}
+
+.notification.warning {
+    background-color: orange;
+}
+
+.notification.error {
+    background-color: red;
+}
+
+.notification.hidden {
+    opacity: 0;
+}

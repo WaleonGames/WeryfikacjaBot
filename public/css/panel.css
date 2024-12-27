@@ -41,7 +41,7 @@ header {
 .header-content h1 {
     margin: 0;
     font-size: 24px;
-    color: #333;
+    color: white;
 }
 
 .header-content form button {
@@ -90,6 +90,20 @@ header {
     width: 40%;
 }
 
+.underline {
+    text-decoration: underline;
+}
+
+.beta {
+    background-color: #ffcc00; /* Kolor tła dla wyróżnienia */
+    color: #fff;               /* Kolor tekstu */
+    font-weight: bold;         /* Pogrubienie tekstu */
+    padding: 2px 5px;          /* Odstępy wewnętrzne */
+    border-radius: 3px;        /* Zaokrąglone rogi */
+    font-size: 0.9em;          /* Zmniejszenie tekstu, by wyglądał jak etykieta */
+    text-transform: uppercase; /* Tekst wielkimi literami */
+}
+
 /* Stylizacja nagłówków i tekstów w sekcjach */
 h1 {
     font-size: 36px;
@@ -135,22 +149,30 @@ form {
     align-items: center;
 }
 
-.roles-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin: 20px 0;
+/* Stylizacja dla samego <select> */
+.roles {
+    width: 100%; /* Szerokość pełna */
+    height: 150px; /* Ustalona wysokość dla lepszego widoku */
+    background-color: #f4f4f4; /* Tło */
+    border: 1px solid #ccc; /* Ramka */
+    border-radius: 5px; /* Zaokrąglone rogi */
+    padding: 10px; /* Wewnętrzne odstępy */
+    font-size: 14px; /* Rozmiar tekstu */
+    color: #333; /* Kolor tekstu */
+    outline: none; /* Usunięcie standardowego obramowania */
+    overflow-y: auto; /* Pasek przewijania */
 }
 
-.role-column {
-    margin: 5px 0;
-    width: 100%;
-    text-align: left;
+/* Stylizacja dla opcji <option> */
+.roles option {
+    padding: 5px;
+    background-color: white;
+    color: #333;
 }
 
-input[type="checkbox"] {
-    margin: 10px;
-    padding: 10px;
+.roles option:checked {
+    background-color: #007bff; /* Kolor tła dla wybranych opcji */
+    color: white; /* Kolor tekstu dla wybranych opcji */
 }
 
 input[type="text"], input[type="number"] {

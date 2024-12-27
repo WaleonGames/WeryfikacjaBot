@@ -5,72 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel użytkownika</title>
     <link rel="stylesheet" href="/css/panel.css">
+    <link rel="stylesheet" href="/css/toast.css">
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <h1><%= username %></h1>
-            <a href="/forum/" class="header-link">Dyskusja/Forum!</a>
-            <a href="/panel/logout" class="header-link">Wyloguj się!</a>
+        <header class="header">
+            <div class="header-content">
+                <h1><%= username %></h1>
+                <a href="/panel/logout" class="header-link">Wyloguj się!</a>
+            </div>
+        </header>
+    
+        <!-- Wrapper na główną zawartość dla układu Flexbox -->
+        <div class="container-wrapper">
+            <!-- Lewa kolumna, można tu dodać dodatkowe informacje -->
+            <div class="container left">
+                <h2>Informacje dodatkowe</h2>
+                <p>Wersja <span class="beta">beta</span> w projekcie, <span class="underline">możliwe błędy</span> będą jeszcze.</p>
+            </div>
+    
+            <!-- Środkowa kolumna (główna sekcja profilu) -->
+            <div class="container center">
+                <h1>Profil użytkownika</h1>
+
+                <!-- Wyświetlanie avatara -->
+                <img src="<%= avatar %>" alt="Avatar" width="100" height="100">
+
+                <!-- Wyświetlanie nazwy użytkownika i numeru tagu -->
+                <h2><%= username %></h2>
+
+                <!-- Wyświetlanie ID użytkownika -->
+                <p>ID: <%= id %></p>
+
+                <!-- Wyświetlanie ról użytkownika -->
+                <p id="userRoles">Role: *Tryb Admin* <br>
+                    <% if (roles && roles.length > 0) { %>
+                        <%= roles %>
+                    <% } else { %>
+                        Brak przypisanych ról
+                    <% } %>
+                </p>
+            </div>
+    
+            <!-- Prawa kolumna (zarządzanie rolami) -->
+            <div class="container right">
+                <h2>Wybierz, jakie role chcesz mieć na profilu</h2>
+                <form action="/api/v1/role/add/<%= guildId %>/<%= id %>" method="post" id="roleForm">
+                    <div class="roles-container">
+                        <select name="roles[]" class="roles" id="roles" multiple> <!-- 'multiple' pozwala na wybór wielu ról -->
+                            <% aroles.forEach(role => { %>
+                                <option value="<%= role %>" <%= roles.includes(role) ? 'selected' : '' %>>
+                                    <%= role %>
+                                </option>
+                            <% }); %>
+                        </select>
+                    </div>                                        
+                    <button type="submit">Nadaj role</button>
+                </form>            
+            </div>
         </div>
-    </header>
-
-    <!-- Wrapper na główną zawartość dla układu Flexbox -->
-    <div class="container-wrapper">
-        <!-- Lewa kolumna, można tu dodać dodatkowe informacje -->
-        <div class="container left">
-            <h2>Informacje dodatkowe</h2>
-            <p>Tutaj możesz dodać dodatkowe informacje o użytkowniku lub systemie.</p>
+    
+        <!-- Stopka -->
+        <div class="footer">
+            <p>
+                <a href="https://discord.gg/QyHSdWNZGe" class="footer-link">Ciężka Praca 22/25</a> x HTGMC Weryfikacja, 
+                <a href="/panel/logout" class="footer-link">Wyloguj się teraz!</a>
+                <p>Ostatnia aktualizacja: <span id="last-update"><%= lastUpdate %></span></p>
+            </p>
         </div>
-
-        <!-- Środkowa kolumna (główna sekcja profilu) -->
-        <div class="container center">
-            <h1>Profil użytkownika</h1>
-
-            <!-- Wyświetlanie avatara -->
-            <img src="<%= avatar %>" alt="Avatar" width="100" height="100">
-
-            <!-- Wyświetlanie nazwy użytkownika i numeru tagu -->
-            <h2><%= username %></h2>
-
-            <!-- Wyświetlanie ID użytkownika -->
-            <p>ID: <%= id %></p>
-
-            <!-- Wyświetlanie ról użytkownika -->
-            <p>Role: <%= roles %></p>
-
-            <!-- Wyświetlanie bannera, jeśli istnieje -->
-            <% if (banner) { %>
-                <img src="<%= banner %>" alt="Banner" class="banner">
-            <% } else { %>
-                <p>Brak bannera (wymaga Nitro).</p>
-            <% } %>
-        </div>
-
-        <!-- Prawa kolumna (zarządzanie rolami) -->
-        <div class="container right">
-            <h2>Wybierz, jakie role chcesz mieć na profilu</h2>
-            <form action="/api/v1/rolegive/<%= guildId %>/<%= id %>" method="post" id="roleForm">
-                <div class="roles-container">
-                    <% aroles.forEach(role => { %>
-                        <div class="role-column">
-                            <input type="checkbox" id="role-<%= role.id %>" name="roles" value="<%= role.id %>">
-                            <label for="role-<%= role.id %>"><%= role.name %></label>
-                        </div>
-                    <% }) %>
-                </div>
-                <button type="submit">Nadaj role</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Stopka -->
-    <div class="footer">
-        <p>
-            <a href="https://discord.gg/QyHSdWNZGe" class="footer-link">Ciężka Praca 22/25</a> x HTGMC Weryfikacja, 
-            <a href="/panel/logout" class="footer-link">Wyloguj się teraz!</a>
-        </p>
-    </div>
 
     <div id="very-banner" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); color: white; display: flex; justify-content: center; align-items: center; z-index: 1000;">
         <div>
@@ -92,7 +93,20 @@
             </form>
         </div>
     </div>
+
+    <!-- Sprawdzamy, czy są jakieś powiadomienia -->
+    <% if (notifications && notifications.length > 0) { %>
+        <div class="notifications">
+            <% notifications.forEach(notification => { %>
+                <div class="notification <%= notification.type %>">
+                    <%= notification.message %>
+                </div>
+            <% }) %>
+        </div>
+    <% } %>
+
     
+    <script src="/socket.io/socket.io.js"></script>
     <script>
         // Funkcja do sprawdzenia obecności parametru 'very=true' w URL
         function getUrlParameter(name) {
@@ -102,14 +116,44 @@
     
         // Jeśli w URL jest parametr 'very=true', zapisujemy w localStorage, że użytkownik został zweryfikowany
         if (getUrlParameter('very') === 'true') {
-            localStorage.setItem('verified', 'true');
+            localStorage.setItem('verifiess', 'true');
         }
     
         // Sprawdzamy, czy użytkownik został zweryfikowany
-        if (localStorage.getItem('verified') === 'true') {
+        if (localStorage.getItem('verifiess') === 'true') {
             // Ukrywamy baner weryfikacyjny, jeśli użytkownik jest zweryfikowany
             document.getElementById('very-banner').style.display = 'none';
         }
+
+        // Ustawiamy animację znikania powiadomień
+        setTimeout(() => {
+            const notifications = document.querySelectorAll('.notification');
+            notifications.forEach(notification => {
+                notification.classList.add('hidden');
+            });
+        }, 5000); // Po 5 sekundach dodajemy klasę .hidden
+
+
+        const socket = io();
+
+        // Nasłuchiwanie na aktualizację ról
+        setTimeout(() => {
+            socket.on('roleUpdate', (updatedRoles) => {
+                document.getElementById('userRoles').innerText = 'Role: ' + updatedRoles;  // Aktualizowanie ról
+            });
+        }, 5000); // Po 5 sekundach dodajemy klasę .hidden
+
+        // Jeśli chcesz, by czas był odświeżany bez przeładowania strony
+        setInterval(() => {
+            fetch('/panel/user/last-update')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('last-update').innerText = data.lastUpdate;
+                })
+                .catch(error => {
+                    console.error('Błąd podczas pobierania daty ostatniej aktualizacji:', error);
+                });
+        }, 60000); // Odświeżaj co minutę
     </script>    
 </body>
 </html>

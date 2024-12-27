@@ -25,7 +25,6 @@ app.use(express.static('public', {
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views')); // Dodanie ścieżki do folderu widoków
 
-
 // Konfiguracja OAuth2 i inne zmienne środowiskowe
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
@@ -35,6 +34,17 @@ const VERIFY_ROLE_ID = '1318671279766900807'; // ID roli, która zostanie przydz
 
 // Przechowywanie tokenów sesji (w prostym obiekcie)
 const sessions = {};
+
+// Endpoint do usuwania ciasteczek
+app.get('/delete-cookie', (req, res) => {
+    // Iterujemy przez wszystkie ciasteczka i usuwamy je
+    Object.keys(req.cookies).forEach(cookie => {
+        res.clearCookie(cookie);
+    });
+    
+    // Przekierowanie użytkownika po usunięciu ciasteczek
+    res.redirect('/');  // Możesz przekierować na stronę główną lub inną
+});
 
 // Nasłuchiwanie na porcie
 app.listen(port, () => {
