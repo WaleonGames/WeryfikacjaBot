@@ -1,4 +1,6 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const axios = require('axios'); // Import axios do wysyłania żądań HTTP
 const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, Events } = require('discord.js');
 const router = express.Router();
 const { decrypt } = require('../../modul/crypto'); // Funkcja do odszyfrowania tokenu sesji
@@ -6,6 +8,9 @@ const { getSession } = require('../../modul/sessions'); // Funkcje do zarządzan
 const notification = require('../../modul/notification'); // Importujemy nasz moduł powiadomień
 const { fetchUserRoles } = require('../../modul/discord'); // Funkcja do pobierania roli użytkownika
 const { Client, GatewayIntentBits } = require('discord.js'); // Importujemy Discord.js
+
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json());
 
 // Inicjalizacja klienta Discorda
 const client = new Client({
@@ -23,6 +28,9 @@ client.login(process.env.DISCORD_TOKEN).catch(error => {
 
 // Inicjalizacja klienta w server.js
 client.once('ready', () => {});
+
+// Twój URL webhooka z Discorda
+const discordWebhookURL = 'https://discord.com/api/webhooks/1323380594540937277/mGp2VPFkbSi83fvmeYUpCwSa094Gw02bh4gnEdjUlCeM9TpF6PU7kkmcPF53yuyHLu4F';
 
 // Funkcja do weryfikacji danych wejściowych
 function validateInput(title, content, guildId, channelId) {
@@ -376,6 +384,34 @@ router.post('/role/add/:guildID/:userID', async (req, res) => {
         notification.add('error', 'Wystąpił błąd podczas synchronizacji ról.');
         console.error('Wystąpił błąd podczas synchronizacji ról:', error);
         return res.redirect(`/panel/user/${userId}?error=Wystąpił błąd podczas synchronizacji ról.`);
+    }
+});
+
+router.post('/send/feedback', async (req, res) => {
+    const { title, content, id, username } = req.body;
+
+    // Walidacja danych
+    if (!title || !content || !id || !username) {
+        return res.status(400).json({ message: 'Proszę podać zarówno tytuł, jak i treść, oraz ID użytkownika.' });
+    }
+
+    // Logowanie na serwerze
+    console.log('Otrzymano feedback:', { title, content, id, username });
+
+    // Przygotowanie danych do wysłania na Discorda
+    const discordMessage = {
+        content: `**Nowy Wiadomość (Feedback)!**\n**Tytuł:** ${title}\n**Treść:** ${content}\n**Autor Wiadomości:** ${id}/${username}`
+    };
+
+    try {
+        // Wysłanie wiadomości do Discorda za pomocą webhooka
+        await axios.post(discordWebhookURL, discordMessage);
+
+        // Odpowiedź dla użytkownika
+        res.redirect(`/panel/user/${id}/thanks-you`);
+    } catch (error) {
+        console.error('Błąd przy wysyłaniu do Discorda:', error);
+        res.status(500).json({ message: 'Wystąpił błąd przy wysyłaniu wiadomości.' });
     }
 });
 

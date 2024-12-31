@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel użytkownika</title>
+    <link rel="stylesheet" href="/css/panel.css">
+    <link rel="stylesheet" href="/css/toast.css">
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body>
+        <header class="header">
+            <div class="header-content">
+                <h1><%= username %></h1>
+                <a href="/panel/logout">Wyloguj się!</a>
+            </div>
+        </header>
+    
+        <!-- Wrapper na główną zawartość dla układu Flexbox -->
+        <div class="container-wrapper">
+            <!-- Lewa kolumna, można tu dodać dodatkowe informacje -->
+            <div class="container left">
+                <h2>Informacje o stronie</h2>
+                <p>Wersja <span class="beta">beta</span> w projekcie, <span class="underline">możliwe błędy</span> będą jeszcze.</p>
+                <p><span class="new">Nowość</span> Pozostało wsporo nowości dodanych więcej informacji na <a href="https://discord.gg/dcdVDE6Kn6">serwerze discord HTG</a>.</p>
+            </div>
+    
+            <!-- Środkowa kolumna (główna sekcja profilu) -->
+            <div class="container center">
+                <h1>Formularz Kontaktowy</h1>
+                <form action="/api/v1/send/feedback" method="post">
+                    <label for="title">Tytuł treści</label>
+                    <input type="text" name="title" id="title" placeholder="Podaj tytuł treści" required>
+                    <label for="content">Opis treść</label>
+                    <input type="text" name="content" id="content" placeholder="Podaj opis treści" required>
+                    <input type="hidden" id="id" name="id" value="<%= id %>">       
+                    <input type="hidden" id="username" name="username" value="<%= username %>">       
+                    <button type="submit">Wyślij wiadomosć</button>
+                </form>
+            </div>
+        </div>
+
+    <!-- Stopka -->
+    <div class="footer">
+        <p>
+            <a href="https://discord.gg/QyHSdWNZGe" class="footer-link">Ciężka Praca 22/25</a> x HTGMC Weryfikacja, 
+            <a href="/panel/logout" class="footer-link">Wyloguj się teraz!</a>
+            <p>Ostatnia aktualizacja: <span id="last-update"><%= lastUpdate %></span></p>
+        </p>
+    </div>
+
+    <!-- Sprawdzamy, czy są jakieś powiadomienia -->
+    <% if (notifications && notifications.length > 0) { %>
+        <div class="notifications">
+            <% notifications.forEach(notification => { %>
+                <div class="notification <%= notification.type %>">
+                    <%= notification.message %>
+                </div>
+            <% }) %>
+        </div>
+    <% } %>   
+</body>
+</html>

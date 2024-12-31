@@ -42,4 +42,67 @@ async function fetchUserRoles(guildId, userId) {
     }
 }
 
-module.exports = { fetchGuildRoles, fetchUserRoles };
+// Pobieranie danych o kanałach z API serwera
+async function fetchChannelsId(guildId, channelId) {
+    console.log(`Pobieranie danych o kanale dla serwera: ${guildId}, kanał: ${channelId}`);
+    
+    try {
+        // Wysyłanie żądania do API, aby pobrać dane o kanałach
+        const response = await fetch(`http://localhost:4000/api/${guildId}/channel/tekst/${channelId}`);
+        
+        if (!response.ok) {
+            console.error(`Błąd odpowiedzi z API dla kanału ${channelId}`);
+            throw new Error('Błąd podczas pobierania danych z API');
+        }
+
+        const data = await response.json();
+        
+        console.log('Dane kanału:', data);
+
+        // Jeśli dane zawierają listę kanałów tekstowych
+        if (data && data.textChannels && Array.isArray(data.textChannels)) {
+            // Mapowanie kanałów na tablicę nazw
+            const channelsArray = data.textChannels.map(channel => channel.name);
+            console.log('Kanały tekstowe:', channelsArray);
+
+            return channelsArray.join(', ');  // Łączenie kanałów w string
+        }
+
+        return 'Brak dostępnych kanałów';  // Zwrócenie komunikatu, jeśli nie znaleziono kanałów
+    } catch (error) {
+        console.error('Błąd przy pobieraniu danych o kanałach:', error);
+        return 'Błąd podczas pobierania kanałów';  // Zwrócenie komunikatu o błędzie
+    }
+}
+
+// Pobieranie wszystkich kanałów dla serwera
+async function fetchChannelAll(guildId) {
+    try {
+        // Wysyłanie żądania do API, aby pobrać dane o kanałach
+        const response = await fetch(`http://localhost:4000/api/${guildId}/channel/tekst/`);
+        
+        if (!response.ok) {
+            throw new Error('Błąd podczas pobierania danych z API');
+        }
+
+        const data = await response.json();
+        
+        console.log('Dane kanałów:', data);
+
+        // Jeśli dane zawierają listę kanałów tekstowych
+        if (data && data.textChannels && Array.isArray(data.textChannels)) {
+            // Mapowanie kanałów na tablicę nazw
+            const channelsArray = data.textChannels.map(channel => channel.name);
+            console.log('Kanały tekstowe:', channelsArray);
+
+            return channelsArray.join(', ');  // Łączenie kanałów w string
+        }
+
+        return 'Brak dostępnych kanałów';  // Zwrócenie komunikatu, jeśli nie znaleziono kanałów
+    } catch (error) {
+        console.error('Błąd przy pobieraniu danych o kanałach:', error);
+        return 'Błąd podczas pobierania kanałów';  // Zwrócenie komunikatu o błędzie
+    }
+}
+
+module.exports = { fetchGuildRoles, fetchUserRoles, fetchChannelsId, fetchChannelAll };

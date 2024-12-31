@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel użytkownika</title>
+    <link rel="stylesheet" href="/css/panel.css">
+    <link rel="stylesheet" href="/css/toast.css">
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1><%= username %></h1>
+            <a href="/panel/logout">Wyloguj się!</a>
+        </div>
+    </header>
+    
+    <!-- Wrapper na główną zawartość dla układu Flexbox -->
+    <div class="container-wrapper">
+
+        <!-- Środkowa kolumna (główna sekcja profilu) -->
+        <div class="container center">
+            <h1>Dziękujemy za Twój feedback!</h1>
+            <p>Twoja wiadomość została pomyślnie przesłana. Odpowiemy na nią tak szybko, jak to możliwe.</p>
+            <a href="/" class="button">Powrót do strony głównej</a>
+        </div>
+    </div>
+
+    <!-- Stopka -->
+    <div class="footer">
+        <p>
+            <a href="https://discord.gg/QyHSdWNZGe" class="footer-link">Ciężka Praca 22/25</a> x HTGMC Weryfikacja, 
+            <a href="/panel/logout" class="footer-link">Wyloguj się teraz!</a>
+            <p>Ostatnia aktualizacja: <span id="last-update"><%= lastUpdate %></span></p>
+        </p>
+    </div>
+
+    <!-- Sprawdzamy, czy są jakieś powiadomienia -->
+    <% if (notifications && notifications.length > 0) { %>
+        <div class="notifications">
+            <% notifications.forEach(notification => { %>
+                <div class="notification <%= notification.type %>">
+                    <%= notification.message %>
+                </div>
+            <% }) %>
+        </div>
+    <% } %>   
+</body>
+</html>

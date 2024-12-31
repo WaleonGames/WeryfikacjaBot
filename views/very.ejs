@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weryfikacja konta Discord</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/toast.css">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <h1>Weryfikacja konta Discord</h1>
+        <p>Aby się zweryfikować, kliknij przycisk poniżej.</p>
+        <a href="https://discord.com/oauth2/authorize?client_id=1284809429241299006&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fdiscord%2Fcallback&scope=identify+guilds+guilds.members.read">
+            <button>zweryfikować się przez Discord</button>
+        </a>
+    </div>
+
+    <!-- Modal do pomocy -->
+    <div id="help-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1;">
+        <div style="background-color: rgb(138, 138, 138); margin: 15% auto; padding: 20px; border-radius: 10px; width: 50%; max-width: 600px;">
+            <span id="close-help-modal" style="float: right; font-size: 24px; cursor: pointer;">&times;</span>
+            <h2>Potrzebujesz pomocy?</h2>
+            <p>Skontaktuj się z naszym zespołem wsparcia na discordze: <a href="https://discord.gg/2bdVgbRpBA" style="color: white; text-decoration: none;">Ciężka Praca 22/25</a> albo z <a href="https://discord.gg/dcdVDE6Kn6" style="color: white; text-decoration: none;">HTGMC - Sieć, Pomoc</a></p>
+        </div>
+    </div>
+
+    <button id="help-button" style="position: fixed; bottom: 20px; right: 20px; background-color: #007bff; border: none; border-radius: 50%; width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; z-index: 1000; color: white; cursor: pointer;">
+        <i class='bx bx-help-circle' style="font-size: 30px;"></i>
+    </button>
+
+    <div id="cookie-banner" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); color: white; display: flex; justify-content: center; align-items: center; z-index: 1000;">
+        <div>
+            <h2>Ta strona używa plików cookie</h2>
+            <p>Używamy plików cookie, aby zapewnić najlepsze wrażenia na naszej stronie. Akceptując, wyrażasz zgodę na nasze zasady dotyczące plików cookie.</p>
+            <button id="accept-cookies">Akceptuję</button>
+        </div>
+    </div>
+
+    <script>
+        const helpButton = document.getElementById('help-button');
+        const helpModal = document.getElementById('help-modal');
+        const closeModal = document.getElementById('close-help-modal');
+    
+        helpButton.addEventListener('click', () => {
+            helpModal.style.display = 'block'; // Wyświetlamy modal
+        });
+    
+        closeModal.addEventListener('click', () => {
+            helpModal.style.display = 'none'; // Zamykamy modal
+        });
+    
+        // Zamknięcie modala po kliknięciu poza jego obszar
+        window.addEventListener('click', (event) => {
+            if (event.target === helpModal) {
+                helpModal.style.display = 'none';
+            }
+        });
+
+        const cookieBanner = document.getElementById('cookie-banner');
+        const acceptCookiesButton = document.getElementById('accept-cookies');
+
+        acceptCookiesButton.addEventListener('click', () => {
+            localStorage.setItem('cookiesAccepted', 'true'); // Ustawiamy akceptację w localStorage
+            cookieBanner.style.display = 'none'; // Ukrywamy baner
+        });
+
+        // Sprawdzamy, czy użytkownik już zaakceptował cookies
+        if (localStorage.getItem('cookiesAccepted') === 'true') {
+            cookieBanner.style.display = 'none';
+        }
+    </script>
+</body>
+</html>

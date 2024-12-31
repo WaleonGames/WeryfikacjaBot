@@ -30,6 +30,12 @@ header {
     padding: 10px 20px;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+header:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.4);
 }
 
 .header-content {
@@ -44,18 +50,10 @@ header {
     color: white;
 }
 
-.header-content form button {
-    padding: 8px 16px;
-    background-color: #4CAF50;
+.header-content a {
+    margin: 0;
+    font-size: 24px;
     color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.header-content form button:hover {
-    background-color: #45a049;
 }
 
 /* Stylizacja głównej zawartości */
@@ -64,28 +62,34 @@ header {
     justify-content: space-around;
     align-items: flex-start;
     width: 90%;
-    margin: 2opx;
+    margin: 20px;
     max-width: 1200px;
-    margin-top: 100px; /* Odstęp, aby nagłówek nie nachodził na treść */
+    margin-top: 120px; /* Odstęp, aby nagłówek nie nachodził na treść */
 }
 
 /* Stylizacja kontenerów */
 .container {
-    background-color: rgba(255, 255, 255, 0.4); /* Półprzezroczyste tło */
-    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.5); /* Półprzezroczyste tło */
+    padding: 30px;
     margin: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    width: 30%; /* Szerokość kontenerów w układzie flex */
-    min-width: 300px; /* Minimalna szerokość dla mniejszych ekranów */
+    border-radius: 12px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+    width: 30%;
+    min-width: 300px;
+    transition: all 0.3s ease;
 }
 
-/* Lewa i prawa kolumna */
+/* Efekt hover dla kontenerów */
+.container:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Sekcja lewa, środkowa i prawa */
 .container.left, .container.right {
     width: 30%;
 }
 
-/* Środkowa kolumna */
 .container.center {
     width: 40%;
 }
@@ -96,6 +100,26 @@ header {
 
 .beta {
     background-color: #ffcc00; /* Kolor tła dla wyróżnienia */
+    color: #fff;               /* Kolor tekstu */
+    font-weight: bold;         /* Pogrubienie tekstu */
+    padding: 2px 5px;          /* Odstępy wewnętrzne */
+    border-radius: 3px;        /* Zaokrąglone rogi */
+    font-size: 0.9em;          /* Zmniejszenie tekstu, by wyglądał jak etykieta */
+    text-transform: uppercase; /* Tekst wielkimi literami */
+}
+
+.new {
+    background-color: #09ff00; /* Kolor tła dla wyróżnienia
+    color: #fff;               /* Kolor tekstu */
+    font-weight: bold;         /* Pogrubienie tekstu */
+    padding: 2px 5px;          /* Odstępy wewnętrzne */
+    border-radius: 3px;        /* Zaokrąglone rogi */
+    font-size: 0.9em;          /* Zmniejszenie tekstu, by wyglądał jak etykieta */
+    text-transform: uppercase; /* Tekst wielkimi literami */
+}
+
+.important {
+    background-color: #ff0000; /* Kolor tła dla wyróżnienia
     color: #fff;               /* Kolor tekstu */
     font-weight: bold;         /* Pogrubienie tekstu */
     padding: 2px 5px;          /* Odstępy wewnętrzne */
@@ -122,6 +146,20 @@ p {
     font-size: 16px;
     margin-bottom: 15px;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+label {
+    font-size: 28px;
+    color: white;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+a {
+    font-size: 16px;
+    margin-bottom: 15px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    color: white;
 }
 
 /* Stylizacja obrazków (avatar) */
@@ -211,7 +249,8 @@ button[type="submit"]:hover {
     background-color: #45a049;
 }
 
-button {
+button, .button {
+    margin: 20px;
     padding: 15px 30px;
     font-size: 20px;
     background-color: #7289DA;
@@ -219,10 +258,18 @@ button {
     border: none;
     cursor: pointer;
     transition: background-color 0.3s;
+    text-decoration: none;
 }
 
-button:hover {
+button:hover, .button:hover {
+    margin: 20px;
     background-color: #5b6eae;
+}
+
+.messages {
+    max-height: 500px; /* Maksymalna wysokość sekcji */
+    overflow-y: auto;  /* Włączenie przewijania pionowego, gdy zawartość jest za duża */
+    padding-right: 10px; /* Padding dla komfortu */
 }
 
 /* Stylizacja stopki */
@@ -234,6 +281,48 @@ button:hover {
     padding: 10px;
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
+}
+
+/* Formularz feedback */
+#feedbackForm {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#feedbackForm.show {
+    display: flex;
+}
+
+#feedbackForm textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #333;
+}
+
+#feedbackForm button {
+    padding: 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#feedbackForm button:hover {
+    background-color: #45a049;
 }
 
 /* Responsywność */
@@ -250,5 +339,16 @@ button:hover {
 
     .container.left, .container.right, .container.center {
         width: 100%;
+    }
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
     }
 }

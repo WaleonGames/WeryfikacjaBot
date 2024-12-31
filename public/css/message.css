@@ -1,0 +1,81 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-image: url('../images/2300320_20241228162926_1.png');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+}
+
+/* Stylizacja kontenera wiadomości */
+.messages {
+    max-height: 500px; /* Maksymalna wysokość sekcji */
+    overflow-y: scroll;  /* Włączenie przewijania pionowego */
+    padding-right: 10px; /* Padding dla komfortu */
+    border-radius: 10px; /* Zaokrąglone rogi */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Lekki cień dla sekcji */
+    margin-top: 20px; /* Odstęp od innych elementów */
+}
+
+/* Stylizacja paska przewijania (scroll) */
+.messages::-webkit-scrollbar {
+    width: 8px; /* Szerokość paska przewijania */
+}
+
+.messages::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* Tło toru przewijania */
+    border-radius: 10px; /* Zaokrąglone rogi toru */
+}
+
+.messages::-webkit-scrollbar-thumb {
+    background-color: #888; /* Kolor kciuka paska */
+    border-radius: 10px; /* Zaokrąglone rogi kciuka */
+    border: 2px solid #f1f1f1; /* Obramowanie dla kciuka */
+}
+
+.messages::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Kolor kciuka po najechaniu */
+}
+
+/* Stylizacja każdej wiadomości */
+.messages-card {
+    padding: 15px; /* Padding wewnątrz karty */
+    margin-bottom: 15px; /* Odstęp między wiadomościami */
+    border-radius: 10px; /* Zaokrąglone rogi */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Lekki cień dla każdej karty */
+    transition: transform 0.3s ease; /* Animacja dla efektu */
+}
+
+.messages-card:hover {
+    transform: translateY(-5px); /* Lekki unoszący się efekt po najechaniu */
+}
+
+/* Stylizacja autora wiadomości */
+.messages-card strong {
+    font-size: 16px; /* Większy rozmiar czcionki dla autora */
+    color: #333; /* Kolor autora */
+    font-weight: bold; /* Pogrubienie */
+}
+
+/* Stylizacja treści wiadomości */
+.messages-card p {
+    font-size: 14px; /* Rozmiar czcionki dla treści */
+    color: #333; /* Kolor treści */
+    line-height: 1.6; /* Odstępy między wierszami */
+    margin: 10px 0; /* Odstępy przed i po treści */
+}
+
+/* Stylizacja daty utworzenia wiadomości */
+.messages-card .timestamp {
+    font-size: 12px; /* Mniejszy rozmiar czcionki dla daty */
+    color: #999; /* Szary kolor daty */
+    text-align: right; /* Wyrównanie do prawej */
+    margin-top: 10px; /* Odstęp od treści */
+}

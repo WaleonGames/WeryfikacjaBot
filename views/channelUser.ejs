@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel użytkownika - Kanały Discord</title>
+    <link rel="stylesheet" href="/css/panel.css">
+    <link rel="stylesheet" href="/css/message.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Panel użytkownika: </h1>
+            <a href="/panel/logout" class="header-link">Wyloguj się!</a>
+        </div>
+    </header>
+
+    <div class="container-wrapper">
+        <div class="container center">
+            <h2><%= channels.channelName %></h2> <!-- Wyświetlanie nazwy kanału -->
+            <p>ID: <%= channels.channelId %></p> <!-- Wyświetlanie ID kanału -->
+            <div class="messages">
+                <% if (channels.messages && channels.messages.length > 0) { %>
+                    <% channels.messages.forEach(message => { %>
+                        <div class="messages-card">
+                            <strong><%= message.author %></strong> <!-- Autor wiadomości -->
+                            <p><%= message.content %></p> <!-- Treść wiadomości -->
+                            <p>Data Utworzenia: <%= new Date(message.timestamp).toLocaleString() %></p> <!-- Data utworzenia wiadomości -->
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p>Brak wiadomości w tym kanale.</p>
+                <% } %>
+            </div>
+        </div>        
+    </div>
+
+    <div class="footer">
+        <p>Ostatnia aktualizacja: <span id="last-update"><%= new Date().toLocaleString() %></span></p>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        // Funkcja przewijająca do ostatniej wiadomości
+        window.onload = function() {
+            const messagesContainer = document.querySelector('.messages');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+    </script>
+</body>
+</html>

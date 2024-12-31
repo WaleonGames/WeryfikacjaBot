@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodaj Serwer - HTG Weryfikacja</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <section id="add-server-form">
+            <h2>Wprowadź dane serwera</h2>
+            <form action="/api/v1/add-server" method="POST">
+                <label for="server_name">Nazwa serwera:</label>
+                <input type="text" id="server_name" name="server_name" required>
+
+                <label for="discord_server_id">ID serwera Discord:</label>
+                <input type="text" id="discord_server_id" name="discord_server_id" required>
+
+                <label for="server_owner_role_id">ID roli właściciela:</label>
+                <input type="text" id="server_owner_role_id" name="server_owner_role_id" required>
+
+                <label for="verified">Status weryfikacji:</label>
+                <input type="number" id="verified" name="verified" value="0" disabled required>
+
+                <button type="submit">Dodaj Serwer</button>
+            </form>
+        </section>
+    </div>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>

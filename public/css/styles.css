@@ -1,0 +1,342 @@
+/* Reset stylów */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Tło strony */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #121212;
+    color: #ffffff;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+}
+
+/* Hero Section */
+.hero {
+    background-image: url('/images/hero.png');
+    background-size: cover;
+    background-position: center;
+    height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero-content {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 40px;
+    border-radius: 10px;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    color: #00ffff;
+}
+
+.hero p {
+    margin-top: 20px;
+    font-size: 1.2rem;
+}
+
+.cta-button {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    color: #ffffff;
+    background-color: #00bfff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+    background-color: #008bcb;
+}
+
+/* Lista Serwerów */
+.servers-list {
+    padding: 50px;
+    background-color: #181818;
+    text-align: center;
+}
+
+.servers-list h2 {
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: #00ffff;
+}
+
+.servers {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.server {
+    background-color: #1f1f1f;
+    padding: 20px;
+    border-radius: 10px;
+    width: 500px;
+    text-align: center;
+}
+
+.server img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.server h3 {
+    margin-top: 20px;
+    font-size: 1.5rem;
+    color: #00bfff;
+    text-decoration: none;
+}
+
+.server_links {
+    margin-top: 20px;
+    font-size: 1.5rem;
+    color: #00bfff;
+    text-decoration: none;
+}
+
+.server p {
+    font-size: 1rem;
+    margin-top: 10px;
+    color: #cccccc;
+}
+
+/* Stylizacja sekcji Oferty */
+.offers-section {
+    padding: 60px 20px;
+    background-color: #121212;
+    color: white;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 3rem;
+    margin-bottom: 40px;
+    color: #00bfff;
+}
+
+.offers-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.offer-card {
+    background-color: #1e1e1e;
+    border-radius: 15px;
+    padding: 30px;
+    width: 400px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: left;
+}
+
+.offer-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.offer-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.offer-title {
+    font-size: 1.8rem;
+    color: #00bfff;
+    margin-bottom: 10px;
+}
+
+.offer-description {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+}
+
+.offer-features {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.offer-features li {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    position: relative;
+    padding-left: 20px;
+}
+
+.offer-features li:before {
+    content: "✓";
+    color: #00bfff;
+    position: absolute;
+    left: 0;
+    font-size: 1.2rem;
+}
+
+.offer-button {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: #00bfff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.offer-button:hover {
+    background-color: #008bcb;
+}
+
+/* Kontener centralny */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+}
+
+/* Formularz */
+#add-server-form {
+    background-color: #333;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    width: 100%;
+}
+
+#add-server-form h2 {
+    text-align: center;
+    color: #00bcd4;
+    margin-bottom: 20px;
+}
+
+/* Style dla etykiet i inputów */
+#add-server-form label {
+    font-size: 1.1em;
+    margin-bottom: 5px;
+    display: block;
+    color: #f0f0f0;
+}
+
+#add-server-form input,
+#add-server-form select,
+#add-server-form button {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #444;
+    border-radius: 6px;
+    background-color: #555;
+    color: #fff;
+    font-size: 1em;
+}
+
+#add-server-form button {
+    background-color: #4CAF50;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#add-server-form button:hover {
+    background-color: #45a049;
+}
+
+/* Responsywność */
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+        justify-content: flex-start;
+    }
+
+    #add-server-form h2 {
+        font-size: 1.5em;
+    }
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #181818;
+}
+
+.footer p {
+    font-size: 1rem;
+    color: #cccccc;
+}
+
+.footer a {
+    color: #00bfff;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+/* Stylizacja pływającego przycisku */
+.floating-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #00bfff;
+    color: white;
+    font-size: 2rem;
+    padding: 20px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 191, 255, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 60px;
+    height: 60px;
+    z-index: 1000;
+}
+
+.floating-button:hover {
+    transform: scale(1.15); /* Powiększenie przycisku przy najechaniu */
+    box-shadow: 0 8px 20px rgba(0, 191, 255, 0.7); /* Efekt poświaty */
+}
+
+/* Tekst pojawiający się po najechaniu */
+.floating-text {
+    position: absolute;
+    bottom: 80px; /* Odsunięcie tekstu powyżej przycisku */
+    right: 50%;
+    transform: translateX(50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.floating-button:hover + .floating-text {
+    opacity: 1; /* Pokazanie tekstu przy najechaniu na przycisk */
+}
